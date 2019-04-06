@@ -4,7 +4,7 @@ process.chdir(__dirname);
 
 // Utils
 const { logError } = require('./utils/log');
-
+const express = require('express')
 /**
  * @type {Telegraf}
  * Bot
@@ -29,13 +29,11 @@ bot.telegram.getMe().then((botInfo) => {
 	bot.options.username = botInfo.username;
 	bot.context.botInfo = botInfo;
 }).then(() => {
+  bot.startWebhook('/webhook', null, '3000');
+	//bot.startPolling();
 });
-bot.launch({
-  webhook: {
-    domain: 'https://tspambot.herokuapp.com/' + process.env.TOKEN,
-    port: 3000
-  }
-})
+
+
 
 bot.use(
 	require('./handlers/middlewares'),

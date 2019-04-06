@@ -6,9 +6,32 @@
   "scripts": {
     "precommit": "bash scripts/pre-commit.sh",
     "postversion": "git push --atomic --follow-tags origin develop develop:master",
-    "start": "node index",
+      "start": "nodemon index.js rs",
     "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "test/*",
+      "docs/*"
+    ],
+    "delay": "90000000",
+    "verbose": true,
+    "execMap": {
+      "js": "node --harmony"
+    },
+    "events": {
+      "restart": "osascript -e 'display notification \"App restarted due to:\n'$FILENAME'\" with title \"nodemon\"'"
+    },
+    "watch": [
+      "package.json",
+      ".env",
+      "index.js"
+    ],
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "ext": "js,json"
   },
   "repository": {
     "type": "git",
@@ -40,13 +63,17 @@
     "require-directory": "^2.1.1",
     "telegraf": "^3.25.0",
     "xregexp": "^4.2.0",
-    "nodemon": "1.18.x"
+    "nodemon": "latest",
+    "net-ping": "latest",
+    "express": "latest"
   },
   "engines": {
     "node": "10.x"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
-    "husky": "^0.14.3"
+    "husky": "^0.14.3",
+    "cron": "^1.1.1",
+    "cron-parser": "^2.2.1"
   }
 }

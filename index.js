@@ -32,7 +32,7 @@ bot.telegram.getMe().then((botInfo) => {
 });
 bot.launch({
   webhook: {
-    domain: 'https://tspambot.herokuapp.com/bot' + process.env.TOKEN,
+    domain: 'https://tspambot.herokuapp.com/' + process.env.TOKEN,
     port: 3000
   }
 })

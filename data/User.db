@@ -1,0 +1,23 @@
+{"status":"member","warns":[],"first_name":"😳","last_name":"","id":360076405,"username":"fuhreur","_id":"3chuVDVycXObHhSm"}
+{"status":"member","warns":[],"first_name":"That anglophone boy","last_name":"","id":526006468,"username":"gorilla_png","_id":"8WAlvmL4GF6gc6oi"}
+{"status":"member","warns":[],"first_name":"Fais","last_name":"Crypto","id":208684128,"username":"faiscrypto","_id":"ALrsBMlum6dZw7dL"}
+{"status":"member","warns":[],"first_name":"Eazi","last_name":"j","id":427113969,"username":"eaziboi","_id":"EuXEVURrUa0wgrLF"}
+{"status":"admin","warns":[],"first_name":"死","last_name":"","id":197005208,"username":"bfaschat","_id":"KlXZQ6IwaDMQTkwo"}
+{"status":"member","warns":[],"first_name":"Unku","last_name":"Dice","id":321464981,"username":"diceboy","_id":"QtvzRVz73OFAYDGh"}
+{"status":"member","warns":[],"first_name":"cipher","last_name":"crypto","id":254176019,"_id":"SQHpFCqIfUvEDaYc"}
+{"status":"member","warns":[],"first_name":"Boss","last_name":"Baby","id":750519217,"username":"bossbaby07","_id":"XmwzMfk2muq7Z18D"}
+{"status":"member","warns":[],"first_name":"Hit","last_name":"Man","id":476945537,"_id":"YG1GdrVXa7UGlPAE"}
+{"status":"member","warns":[],"first_name":"㊒ʞ̶̶ɔʌןB|✇|s̶Δϻuяﾑﾉ㊜","last_name":"","id":322740475,"username":"r0n1n7","_id":"ab2cJXMO1dvrkkAT"}
+{"status":"member","warns":[],"first_name":"CONFIDENCE","last_name":"","id":299332645,"username":"confidence237","_id":"eTkJorMvbTIUzXxJ"}
+{"status":"member","warns":[],"first_name":"DANTE","last_name":"","id":385276529,"_id":"jBnN9EsYgb2bhoOH"}
+{"status":"member","warns":[],"first_name":"🐾Staph","last_name":"Gavnar🐥","id":675629318,"username":"gavnarr","_id":"jLkWZ5HtSu7Pe2f1"}
+{"status":"member","warns":[],"first_name":"Bill","last_name":"Clovis","id":289924275,"username":"billclovis","_id":"pEZ0fzXK3yIDmZYB"}
+{"status":"member","warns":[],"first_name":"mit_fix","last_name":"","id":117347105,"username":"mit_fix","_id":"pon3SCPW0J56c5fw"}
+{"status":"member","warns":[],"first_name":"Ulisse","last_name":"","id":764945683,"_id":"qYTEH4AK3hEaOdqJ"}
+{"status":"member","warns":[],"first_name":"Rawlings","last_name":"Frakenstein","id":532433333,"username":"frakenstein","_id":"uUhzoggf43mzMXOM"}
+{"status":"member","warns":[],"first_name":"Mobiprox","last_name":"Admin","id":440287996,"username":"moboprox_admin","_id":"vuD1tWdVKfOjj9pN"}
+{"status":"member","warns":[],"first_name":"Neville","last_name":"","id":658069483,"username":"neeville","_id":"xRCLd7mjpUzZtTu0"}
+{"status":"member","warns":[],"first_name":"▪VENOM▪","last_name":"","id":409257769,"username":"venomraider","_id":"yciC3HzISE7UnseS"}
+{"$$indexCreated":{"fieldName":"id","unique":true,"sparse":false}}
+{"$$indexCreated":{"fieldName":"status","unique":false,"sparse":false}}
+{"$$indexCreated":{"fieldName":"username","unique":true,"sparse":true}}

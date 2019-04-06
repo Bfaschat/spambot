@@ -9,7 +9,7 @@
  * Config file in JSON format (`config.json`) is also supported.
  * For backwards compatibility, and because why not, it needs no extra code.
  */
-
+ 
 /**
  * Millisecond
  * String to be parsed by https://npmjs.com/millisecond,

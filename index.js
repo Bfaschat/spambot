@@ -29,9 +29,13 @@ bot.telegram.getMe().then((botInfo) => {
 	bot.options.username = botInfo.username;
 	bot.context.botInfo = botInfo;
 }).then(() => {
-	bot.startPolling();
 });
-
+bot.launch({
+  webhook: {
+    domain: process.env.APP_URL + process.env.TOKEN,
+    port: 3000
+  }
+})
 
 bot.use(
 	require('./handlers/middlewares'),

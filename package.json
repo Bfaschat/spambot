@@ -65,7 +65,8 @@
     "xregexp": "^4.2.0",
     "nodemon": "latest",
     "net-ping": "latest",
-    "express": "latest"
+    "express": "latest",
+     "nodemon": "1.x"
   },
   "engines": {
     "node": "10.x"

@@ -2684,7 +2684,7 @@ specifiers:
   nedb-promise: ^2.0.1
   net-ping: latest
   node-fetch: ^2.2.0
-  nodemon: latest
+  nodemon: 1.x
   ramda: ^0.25.0
   require-directory: ^2.1.1
   telegraf: ^3.25.0

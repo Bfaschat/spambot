@@ -1,0 +1,81 @@
+{
+  "name": "the_guard_bot",
+  "version": "0.9.1",
+  "description": "Telegram guard bot to manage network of groups.",
+  "main": "index.js",
+  "scripts": {
+    "precommit": "bash scripts/pre-commit.sh",
+    "postversion": "git push --atomic --follow-tags origin develop develop:master",
+      "start": "nodemon index.js rs",
+    "lint": "eslint .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "test/*",
+      "docs/*"
+    ],
+    "delay": "90000000",
+    "verbose": true,
+    "execMap": {
+      "js": "node --harmony"
+    },
+    "events": {
+      "restart": "osascript -e 'display notification \"App restarted due to:\n'$FILENAME'\" with title \"nodemon\"'"
+    },
+    "watch": [
+      "package.json",
+      ".env",
+      "index.js"
+    ],
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "ext": "js,json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheDevs-Network/bot.git"
+  },
+  "keywords": [
+    "bot",
+    "the guard",
+    "thedevs",
+    "telegram"
+  ],
+  "author": "Thomas Rory Gummerson <thomas@gummerson.no> (https://trgwii.no)",
+  "contributors": [
+    "Pouria Ezzati <pouria@thedevs.network> (https://thedevs.network)",
+    "GingerPlusPlus <woj.pawlik@gmail.com>"
+  ],
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/TheDevs-Network/the-guard-bot/issues"
+  },
+  "homepage": "https://github.com/TheDevs-Network/the-guard-bot/",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "dotenv": "^4.0.0",
+    "daggy": "^1.3.0",
+    "dedent-js": "^1.0.1",
+    "millisecond": "^0.1.2",
+    "nedb-promise": "^2.0.1",
+    "node-fetch": "^2.2.0",
+    "ramda": "^0.25.0",
+    "require-directory": "^2.1.1",
+    "telegraf": "^3.25.0",
+    "xregexp": "^4.2.0",
+    "net-ping": "latest",
+    "express": "latest",
+     "nodemon": "1.x"
+  },
+  "engines": {
+    "node": "10.x"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "husky": "^0.14.3",
+    "cron": "^1.1.1",
+    "cron-parser": "^2.2.1"
+  }
+}

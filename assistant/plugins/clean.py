@@ -1,4 +1,5 @@
-# MIT License
+
+      # MIT License
 #
 # Copyright (c) 2019 Dan Tès <https://github.com/delivrance>
 #
@@ -25,7 +26,7 @@ from pyrogram import Message, User
 from pyrogram.api import functions
 
 from ..assistant import (Assistant, LOGS, LOGGER, LOGGER_GROUP, __schema, __settings)
-from assistant.utils.config import (Bfasbot, __msgs, __score_user, __get_message_link)
+from assistant.utils.config import (__notify_admin, __msgs, __score_user, __get_message_link)
 
 import logging
 import sys
@@ -35,21 +36,33 @@ from assistant.utils.helpers import ParamExtractor, Ranges
 
 from assistant.utils.settings import Settings, CheckMessage, CheckUsername, LogMessage
 
-from ..assistant import (Assistant, LOGS, LOGGER, LOGGER_GROUP, __schema, __settings)
-from assistant.utils.config import (Bfasbot, __msgs, __score_user, __get_message_link)
-    
-  
-  
-  
-@Assistant.on_message(Filters.command("start"))
-def gov(bot: Assistant, message: Message):
+
+@Assistant.on_message(Filters.command(["remove","rm"]))
+def handle_remove(bot: Assistant, message: Message) -> None:
             """
-            Handle /start command in private chats.
+            Handle /remove command in supergroups. Admin feature.
+            Remove message replied by this command.
             :param message: Message, triggered this event.
             """
-            print(__msgs['as_welcome'])
             try:
-                message.reply(__msgs['as_welcome'])
+                # Remove reported message...
+                if message.reply_to_message:
+                    bot.delete_messages(message.chat.id, message.reply_to_message.message_id)
+                    logmsg =__msgs['as_amsgrm'].format(
+                            message.from_user.first_name, 
+                            message.from_user.id,
+                            message.reply_to_message.from_user.first_name,
+                            message.reply_to_message.from_user.id, 
+                            message.chat.id,
+                            message.chat.title
+                          )
+                    bot.send_message(
+                      LOGGER_GROUP,
+                      logmsg
+                    )
+                    Notify = __notify_admin(message, logmsg)
+                    bot.send_message(Notify, logmsg)
+
             except Exception as e:
-                LOGS.info(e, __msgs['as_pmex'])
- 
+                LOGS.error(e, __msgs['as_admerr'])
+                

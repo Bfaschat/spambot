@@ -35,7 +35,7 @@ class Ranges:
         Main constructor of Ranges class.
         :param inputstr: Source string.
         """
-        self.__rlist = list(chain.from_iterable(map(self.__parserange, inputstr.split(','))))
+        self.__rlist = list(chain.from_iterable(map(self.__parserange, " ".join(inputstr).split(','))))
 
 
 class ParamExtractor:

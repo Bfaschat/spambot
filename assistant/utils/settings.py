@@ -286,6 +286,7 @@ class Settings:
         Add a new stopword to the list of restricted words.
         :param stopword: Restricted word to add.
         """
+        #del self.__data['stopwords']
         if stopword not in self.__data['stopwords']:
             self.__data['stopwords'].append(stopword)
 
@@ -301,7 +302,8 @@ class Settings:
         """
         Save current settings to JSON file.
         """
-        with open(self.__cfgfile, 'w') as f:
+        os.remove(self.__cfgfile)
+        with open(self.__cfgfile, 'w+') as f:
             json.dump(self.__data, f)
 
     def load(self) -> None:

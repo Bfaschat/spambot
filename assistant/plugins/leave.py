@@ -25,7 +25,7 @@ from pyrogram import Message, User
 from pyrogram.api import functions
 
 from ..assistant import (Assistant, LOGS, LOGGER, LOGGER_GROUP, __schema, __settings)
-from assistant.utils.config import (Bfasbot, __msgs, __score_user, __get_message_link)
+from assistant.utils.config import (__msgs, __score_user, __get_message_link)
 
 import logging
 import sys
@@ -35,21 +35,45 @@ from assistant.utils.helpers import ParamExtractor, Ranges
 
 from assistant.utils.settings import Settings, CheckMessage, CheckUsername, LogMessage
 
-from ..assistant import (Assistant, LOGS, LOGGER, LOGGER_GROUP, __schema, __settings)
-from assistant.utils.config import (Bfasbot, __msgs, __score_user, __get_message_link)
-    
-  
-  
-  
-@Assistant.on_message(Filters.command("start"))
-def gov(bot: Assistant, message: Message):
+
+
+@Assistant.on_message(Filters.command("leave"))
+def leave(bot: Assistant, message: Message) -> None:
             """
-            Handle /start command in private chats.
+            Handle /leave command in private chats. Allow admins to ask bot leave
+            specified supergroup. Restricted command.
             :param message: Message, triggered this event.
             """
-            print(__msgs['as_welcome'])
             try:
-                message.reply(__msgs['as_welcome'])
-            except Exception as e:
-                LOGS.info(e, __msgs['as_pmex'])
- 
+                leavereq = ParamExtractor(message.text)
+                if leavereq.index != -1:
+                    try:
+                        bot.send_message(
+                          LOGGER_GROUP,
+                          __msgs['as_leavelg'].format(
+                            message.from_user.first_name, 
+                            message.from_user.id,
+                            message.from_user.title, 
+                            leavereq.param
+                          ))
+                    
+                        bot.leave_chat(leavereq.param)
+                      
+                        bot.send_message(
+                          message.chat.id, 
+                          __msgs['as_leaveok'].format(
+                            leavereq.param
+                          ))
+                    except:
+                        bot.send_message(
+                          message.chat.id, 
+                          __msgs['as_leaverr'].format(
+                            leavereq.param
+                          ))
+                else:
+                    bot.send_message(
+                      message.chat.id, 
+                      __msgs['as_leavepm']
+                    )
+            except:
+                LOGS.error(__msgs['as_pmex'])

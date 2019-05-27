@@ -2,7 +2,8 @@ from time import time
 
 from pyrogram import (CallbackQuery, Emoji, Filters, InlineKeyboardButton,
                       InlineKeyboardMarkup, Message)
-from ..assistant import (Assistant, LOGS, LOGGER, LOGGER_GROUP, __schema, __settings, __msgs, __score_user, __get_message_link)
+from ..assistant import (Assistant, LOGS, LOGGER, LOGGER_GROUP, __schema, __settings)
+from assistant.utils.config import (__msgs, __score_user, __get_message_link)
 from assistant.utils.callback import pyro_keyboard
 from pyrogram import Client, Emoji, Filters
 from assistant.utils.settings import Settings, CheckMessage, CheckUsername, LogMessage

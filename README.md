@@ -1,30 +1,36 @@
-# BfasBot 🔥🤖
+# Pyrogram Assistant
 
-A Telegram Selfbot based on [Pyrogram](https://github.com/pyrogram/pyrogram)
+<img src="https://i.imgur.com/JyxrStE.png" width="160" align="right">
 
-## Initial Commands
+> The assistant bot that helps people with [Pyrogram](//github.com/pyrogram/pyrogram) directly on Telegram.
 
-| Command | Description |
-|---|---|
-| `.up` - Check if your bot is running
-| `.help` - Gives out a link to [all commands](HELP.md)
+This repository contains the source code of [@PyrogramBot](//t.me/pyrogrambot) and the instructions for running a
+copy yourself. Beside its main purpose, the bot is featuring [**Pyrogram Asyncio**](//github.com/pyrogram/pyrogram/issues/181),
+[**Smart Plugins**](//docs.pyrogram.ml/resources/SmartPlugins) and **Inline Mode**; feel free to explore the source code to
+learn more about these topics.
 
-## Installation
+## Requirements
 
-1. `git clone https://github.com/Bfas237/bfasbot`
-2. `cd bfasbot`
-3. Create a new `.env` file (as [.env.sample](.env.sample))
-4. Execute with `python -m bfasbot`
-5. Send `.alive` in any chat to confirm the userbot is running
+- Python 3.6 or higher.
+- A [Telegram API key](//docs.pyrogram.ml/start/Setup#api-keys).
+- A [Telegram bot token](//t.me/botfather).
 
+## Run
 
-## ASCII IMAGE TEST
+1. `git clone https://github.com/pyrogram/assistant`, to download the source code.
+2. `cd assistant`, to enter the directory.
+3. `pip3 install -r requirements.txt`, to install the requirements.
+4. Create a new `assistant.ini` file, copy-paste the following and replace the values with your own:
+   ```ini
+   [pyrogram]
+   api_id = 12345
+   api_hash = 0123456789abcdef0123456789abcdef
+   
+   [assistant]
+   bot_token = 123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
+   ```
+5. Run with `python3 -m assistant`, stop with <kbd>CTRL+C</kbd>.
 
-![Main](pics/img.png)
+## License
 
-
-
-## Credits
-
-* [Colin Shark](https://git.colinshark.de/PyroBot/PyroBot)
-* [Dan Tès](https://github.com/delivrance) for his [Pyrogram Library](https://github.com/pyrogram/pyrogram)
+MIT © 2019 [Dan Tès](//github.com/delivrance)

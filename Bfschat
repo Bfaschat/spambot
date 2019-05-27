@@ -1,3 +1,0 @@
-
-    LOADs = "🧿 **Modules Loaded**: {}\n\n**Active:** {}\n".format(len(ALL_MODULES), ", ".join(ALL_MODULES))
-    LOAD += LOADs

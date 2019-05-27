@@ -1,0 +1,18 @@
+{
+  "schema": 8,
+  "admins": [197005208],
+  "restent": ["url", "text_link", "mention"],
+  "stopwords": ["SEO", "Deleted"],
+  "bantime": 1209600,
+  "maxname": 75,
+  "chkrgx": "(.*VX.*QQ.+)",
+  "urlrgx": "(https?)",
+  "logtofile": "",
+  "maxemoji": 10,
+  "nickgoal": 100,
+  "msggoal": 100,
+  "logfilefmt": "%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+  "stderrfmt": "%(levelname)s:%(name)s:%(message)s",
+  "watches": [],
+  "restlangs": []
+}

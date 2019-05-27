@@ -1,10 +1,2 @@
-requests_futures
-https://github.com/pyrogram/pyrogram/archive/asyncio.zip
-tgcrypto
-cfscrape
-bs4
-aiofiles
-async_timeout
-aiohttp
-timeago
-clint
+pyrogram[fast]
+TgCrypto

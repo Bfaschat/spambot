@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-    "heroku": "^7.24.3",
-    "pnpm": "^3.2.0"
-  },
-  "engines": {
-    "node": "10.x"
-  }
-}

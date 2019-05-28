@@ -26,17 +26,108 @@ from pyrogram import Message, User
 from pyrogram.api import functions
 
 from ..assistant import (Assistant, LOGS, LOGGER, LOGGER_GROUP, __schema, __settings)
-from assistant.utils.config import (__msgs, __score_user, __get_message_link)
-
+from assistant.utils.config import (check_restricted_user, __score_message, __check_message_entities, __check_message_spam, __check_message_forward, group_admin_only, __get_actual_username, __get_actual_userid, __msgs, __score_user, __get_message_link, __notify_admin)
+ 
 import logging
 import sys
 import time
 
 from assistant.utils.helpers import ParamExtractor, Ranges
 
-from assistant.utils.settings import Settings, CheckMessage, CheckUsername, LogMessage
+from assistant.utils.settings import Settings, CheckMessage, CheckUsername
 
+ADMINTITLE = "**Admins in \"{}\"**\n\n"
+ADMINCREATOR = (
+    '╔ **Creator**\n'
+    '╚ `{} `[{}](tg://user?id={})\n\n')
+ADMINLISTLASTBOT = '╚ `{} `[{}](tg://user?id={}) `ᴮᴼᵀ`\n'
+ADMINLISTLAST = '╚ `{} `[{}](tg://user?id={})\n'
+ADMINLISTBOT = '╠ `{} `[{}](tg://user?id={}) `ᴮᴼᵀ`\n'
+ADMINLIST = '╠ `{} `[{}](tg://user?id={})\n'
 
+MEMBER_INFO = (
+    "╔═════════\n"
+    "╠ **{}**\n"
+    "╠ Member Count\n"
+    "╠═════════\n"
+    "╠ Total: `{}`\n"
+    "╠═════════\n"
+    "╠ Admins: `{}`\n"
+    "╠ Members: `{}`\n"
+    "╠ Bots: `{}`\n"
+    "╠═════════\n"
+    "╠ Deleted Accounts: `{}`\n"
+    "╚═════════")
+
+CHAT_INFO = (
+    "╔═════════\n"
+    "║ **Overview Chatlist**\n"
+    "║ Total Chats: {}\n"
+    "╠═════════\n"
+    "║ Private Chats: {}\n"
+    "║ Bots: {}\n"
+    "║ Groups: {}\n"
+    "║ Supergroups: {}\n"
+    "║ Channels: {}\n"
+    "╠═════════\n"
+    "║ Time elapsed: {}\n"
+    "╚═════════")
+
+UNREAD_INFO = (
+    "╔═════════\n"
+    "║ **Unread Messages**\n"
+    "║ Total: `{total_msg}` in {total_chats} Chats\n"
+    "╠═════════\n"
+    "║ Messages from\n"
+    "║ `{msg_private}` msg - {chat_private} Users\n"
+    "║ `{msg_bots}` msg - {chat_bots} Bots\n"
+    "║ `{msg_groups}` msg - {chat_groups} Groups\n"
+    "║ `{msg_super}` msg - {chat_super} Supergroups\n"
+    "║ `{msg_channel}` msg - {chat_channel} Channels\n"
+    "╚═════════")
+
+@Assistant.on_message(Filters.command("mem", "."))
+@group_admin_only
+def get_members(bot: Assistant, message: Message):
+    if message.chat.type == 'private':
+        message.delete()
+
+    else:
+        total = 0
+        admins = 0
+        members = 0
+        bots = 0
+        deleted = 0
+        hp =  [x.user.id for x in bot.iter_chat_members(message.chat.id) if x.status in ['restricted']]
+        if 197005208 in hp:
+          print(True)
+        else:
+          print(False)
+        print(hp)
+        for member in bot.iter_chat_members(message.chat.id):
+            total += 1
+            if member.user.is_bot:
+                bots += 1
+            elif member.user.is_deleted:
+                deleted += 1
+            elif member.status in ['creator', 'administrator']:
+                admins += 1
+            elif not member.user.is_deleted and not member.user.is_bot:
+                members += 1
+
+        member_count_text = MEMBER_INFO.format(
+            message.chat.title,
+            total,
+            admins,
+            members,
+            bots,
+            deleted
+        )
+
+        message.reply(member_count_text)
+        LogMessage(member_count_text)
+
+        
         
 @Assistant.on_message(Filters.command(['ban', 'block']))
 def handle_banuser(bot: Assistant, message: Message) -> None:

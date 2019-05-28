@@ -33,11 +33,7 @@ import time
 
 from assistant.utils.helpers import ParamExtractor, Ranges
 
-from assistant.utils.settings import Settings, CheckMessage, CheckUsername, LogMessage
-
-from ..assistant import (Assistant, LOGS, LOGGER, LOGGER_GROUP, __schema, __settings)
-from assistant.utils.config import (Bfasbot, __msgs, __score_user, __get_message_link)
-    
+from assistant.utils.settings import Settings, CheckMessage, CheckUsername
   
   
   
@@ -47,7 +43,7 @@ def gov(bot: Assistant, message: Message):
             Handle /start command in private chats.
             :param message: Message, triggered this event.
             """
-            print(__msgs['as_welcome'])
+            print(message.entities)
             try:
                 message.reply(__msgs['as_welcome'])
             except Exception as e:

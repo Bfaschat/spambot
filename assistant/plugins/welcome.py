@@ -6,7 +6,7 @@ from ..assistant import (Assistant, LOGS, LOGGER, LOGGER_GROUP, __schema, __sett
 from assistant.utils.config import (__msgs, __score_user, __get_message_link)
 from assistant.utils.callback import pyro_keyboard
 from pyrogram import Client, Emoji, Filters
-from assistant.utils.settings import Settings, CheckMessage, CheckUsername, LogMessage
+from assistant.utils.settings import Settings, CheckMessage, CheckUsername
 
 TARGET = "bfas237off"  # Target chat. Can also be a list of multiple chat ids/usernames
 MENTION = "[{}](tg://user?id={})"  # User mention markup
@@ -157,7 +157,7 @@ def callback_query_pyro(bot: Assistant, cb: CallbackQuery):
                 
 
 
-@Assistant.on_message(Filters.chat('bfas237off') & Filters.command("un", "!"))
+@Assistant.on_message(Filters.command("un", "!"))
 def unrestrict_members(bot: Assistant, message: Message):
     print(message)
     caller = bot.get_chat_member(message.chat.id, message.from_user.id)
@@ -172,3 +172,4 @@ def unrestrict_members(bot: Assistant, message: Message):
             can_add_web_page_previews=True,
             can_send_polls=True)
         message.reply("Restrictions lifted " + Emoji.OK_HAND)
+ 

@@ -2,17 +2,17 @@ from assistant.utils.helpers import ParamExtractor, Ranges
 from ..assistant import (Assistant, __settings)
 from assistant.utils.settings import Settings, CheckMessage, CheckUsername
 from functools import wraps
+from assistant.utils.mwt import MWT
+from pyrogram import Filters
+from html import escape
+
+def escape_markdown(text):
+    """Helper function to escape telegram markup symbols."""
+    escape_chars = '\*_`\['
+    return re.sub(r'([%s])' % escape_chars, r'\\\1', text)
+
 
 class Bfasbot:
-    def __check_restricted_user(self, message) -> bool:
-        """
-        Check if message was sent by a restricted user in supergroup.
-        :param message: Message to check.
-        :return: Check results.
-        """
-        usr = self.bot.get_chat_member(message.chat.id, message.from_user.id)
-        return message.chat.type == 'supergroup' and usr.status == 'restricted'
-
     def __check_admin_feature(self, message) -> bool:
         """
         Check if message was sent by user with admin rights in supergroup.
@@ -38,79 +38,8 @@ class Bfasbot:
         :return: Check results.
         """
         return message.chat.type == 'private'
-
-    def __get_actual_username(self, message) -> str:
-        """
-        Get a real username of current message's sender.
-        :param message: Message to check.
-        :return: Real username.
-        """
-        return message.reply_to_message.new_chat_member.first_name if message.reply_to_message.new_chat_member else message.reply_to_message.from_user.first_name
-
-    def __get_actual_userid(self, message) -> str:
-        """
-        Get a real ID of current message's sender.
-        :param message: Message to check.
-        :return: Real ID.
-        """
-        return message.reply_to_message.new_chat_member.id if message.reply_to_message.new_chat_member else message.reply_to_message.from_user.id
-
-    def __check_message_forward(self, message) -> bool:
-        """
-        Check if current message was forwarded from another chat.
-        :param message: Message to check.
-        :return: Check results.
-        """
-        return message.forward_from or message.forward_from_chat
-
-    def __get_message_link(self, message) -> str:
-        """
-        Generate full URL to specified message.
-        :param message: Message to process.
-        :return: Full URL.
-        """
-        return 'https://t.me/{}/{}'.format(message.chat.username, message.reply_to_message.message_id)
-
-    def __check_message_entities(self, message) -> bool:
-        """
-        Check if current message contains restricted entitles.
-        :param message: Message to check.
-        :return: Check results.
-        """
-        if message.entities:
-            for entity in message.entities:
-                if entity.type in self.__settings.restent:
-                    return True
-        return False
-
-    def __check_message_spam(self, message) -> bool:
-        """
-        Check if current message contains spam.
-        :param message: Message to check.
-        :return: Check results.
-        """
-        return self.__score_message(message) >= self.__settings.msggoal
-
-    def __score_user(self, account) -> int:
-        """
-        Check current user's profile and score him.
-        :param account: User ID (from API).
-        :return: Score results.
-        """
-        checker = CheckUsername(account, self.__settings)
-        return checker.score
-
-    def __score_message(self, message) -> int:
-        """
-        Check current message and score it.
-        :param message: Message to check.
-        :return: Score results.
-        """
-        checker = CheckMessage(message, self.__settings)
-        return checker.score
-
-
-        
+      
+      
 __msgs = {
             'as_welcome': 'Add me to supergroup and give me admin rights. I will try to block spammers automatically.',
             'as_alog': 'New user {} ({}) has joined chat {} ({}). Score: {}.',
@@ -163,6 +92,32 @@ __msgs = {
 
 
 
+      
+def __check_message_forward(message) -> bool:
+        """
+        Check if current message was forwarded from another chat.
+        :param message: Message to check.
+        :return: Check results.
+        """
+        return message.forward_from or message.forward_from_chat
+        
+
+def __get_actual_username(message) -> str:
+        """
+        Get a real username of current message's sender.
+        :param message: Message to check.
+        :return: Real username.
+        """
+        return message.reply_to_message.new_chat_member.first_name if message.reply_to_message.new_chat_member else message.reply_to_message.from_user.first_name
+
+def __get_actual_userid(message) -> str:
+        """
+        Get a real ID of current message's sender.
+        :param message: Message to check.
+        :return: Real ID.
+        """
+        return message.reply_to_message.new_chat_member.id if message.reply_to_message.new_chat_member else message.reply_to_message.from_user.id
+
 def __notify_admin(message, logstr) -> None:
         """
         Notify admin about event if subscribed.
@@ -183,39 +138,81 @@ def __score_user(account, yes) -> None:
         checker = CheckUsername(account, yes, __settings)
         return checker.score
 
+
+def __check_message_entities(message) -> bool:
+        """
+        Check if current message contains restricted entitles.
+        :param message: Message to check.
+        :return: Check results.
+        """
+        if message.entities:
+            for entity in message.entities:
+                if entity.type in __settings.restent:
+                    return True
+        return False
+
+def __check_message_spam(message) -> bool:
+        """
+        Check if current message contains spam.
+        :param message: Message to check.
+        :return: Check results.
+        """
+        return __score_message(message) >= __settings.msggoal
+      
+def __score_message(message) -> int:
+        """
+        Check current message and score it.
+        :param message: Message to check.
+        :return: Score results.
+        """
+        checker = CheckMessage(message, __settings)
+        return checker.score
+
+
 def __get_message_link(message) -> None:
         """
         Generate full URL to specified message.
         :param message: Message to process.
         :return: Full URL.
         """
-        return 'https://t.me/{}/{}'.format(message.chat.username, message.reply_to_message.message.id)
+        return 't.me/c/{}/{}'.format(str(message.chat.id).replace("-100", ""), message.reply_to_message.message.id)
+
+def __check_restricted_user(bot, message) -> bool:
+        """
+        Check if message was sent by a restricted user in supergroup.
+        :param message: Message to check.
+        :return: Check results.
+        """
+        usr = bot.get_chat_member(message.chat.id)
+        return message.chat.type == 'supergroup' and usr.status == 'restricted'
     
+    
+    
+    
+    
+
 import re
 
+def check_restricted_user(func):
+    @wraps(func)
+    def wrapped(bot, update, *args, **kwargs):
+        user_id = update.from_user.id
+        chat_id = update.chat.id
+        if user_id in group_spammers(bot, chat_id):
+            return func(bot, update, *args, **kwargs)
+        else:
+          return 
+        return func(bot, update, *args, **kwargs)
+    return wrapped
 
-def pass_db(chat_only=False, user_only=False):
-    def pass_db_real(func):
-        @wraps(func)
-        def wrapped(bot, update, *args, **kwargs):
-            usr = Usr.from_tg_user_object(update.effective_user)
-            if not update.effective_chat.type == 'private':
-                grp = Grp.from_tg_chat_object(update.effective_chat)
-            else:
-                grp = None
-            if chat_only:
-                return func(bot, update, grp, *args, **kwargs)
-            if user_only:
-                return func(bot, update, usr, *args, **kwargs)
-            return func(bot, update, grp, usr, *args, **kwargs)
-        return wrapped
-    return pass_db_real
-
-
+@MWT(timeout=60*10)
+def group_spammers(bot, chat_id):
+    return [x.user.id for x in bot.iter_chat_members(chat_id) if x.status in ['restricted']]
+  
 def dev_only(func):
     @wraps(func)
     def wrapped(bot, update, *args, **kwargs):
-        user_id = update.effective_user.id
+        user_id = update.from_user.id
         if user_id not in DEV:
             update.effective_message.reply_text(_("You are not a developer!"))
             return
@@ -226,17 +223,17 @@ def dev_only(func):
 def group_admin_only(func):
     @wraps(func)
     def wrapped(bot, update, *args, **kwargs):
-        user_id = update.effective_user.id
-        chat_id = update.effective_chat.id
+        user_id = update.from_user.id
+        chat_id = update.chat.id
         if user_id not in group_admins(bot, chat_id):
             update.effective_message.reply_text(_("You are not an admin in this chat!"))
             return
         return func(bot, update, *args, **kwargs)
     return wrapped
 
-
+@MWT(timeout=60*10)
 def group_admins(bot, chat_id):
-    return [admin.user.id for admin in bot.get_chat_administrators(chat_id)]
+    return [x.user.id for x in bot.iter_chat_members(chat_id) if x.status in ['creator', 'administrator']]
 
 
 def if_group_admin(bot, chat_id, user_id):
@@ -269,4 +266,4 @@ def check_group_link(link):
 
 
 def link_markdown(name, link):
-    return "[{}]({})".format(escape_md(name), link)      
+    return "[{}]({})".format(escape_markdown(name), link)      

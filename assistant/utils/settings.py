@@ -3,34 +3,11 @@
 import json
 import os
 import logging
-from pyrogram import Emoji, Client
-import re
+from pyrogram import Client
+import re, emoji
 LOGGER=True
 
 
-
-        
-class LogMessage:
-        """
-        Log important messages to channel.
-        :return: forwarded message.
-        """
-        @property
-        def Log(self):
-            if LOGGER:
-                 Client.send_message(
-            chat_id = LOGGER_GROUP,
-            text = self.__text
-        )  
-        def __init__(self, message) -> None:
-            """
-            Main constructor of CheckMessage class.
-            :param message: Message to check.
-            :param settings: Object of Settings class.
-            """
-            self.__message = message
-            self.__text = self.__message
-    
 class CheckMessage:
     @classmethod
     def __find_methods(cls, prefix: str) -> set:
@@ -88,7 +65,7 @@ class CheckMessage:
         """
         self.__message = message
         self.__settings = settings
-        self.__emojicnt = Emoji.emoji_count(self.__message.text)
+        self.__emojicnt = emoji.emoji_count(self.__message.text)
         self.__scorers = self.__find_methods('check')
 
 
@@ -143,6 +120,15 @@ class Settings:
         :return: Bot admins list.
         """
         return self.__data['admins']
+      
+    @property
+    def chats(self) -> list:
+        """
+        Get bot admins list. This users can execute any bot command and even
+        control supergroups using special bot actions.
+        :return: Bot admins list.
+        """
+        return self.__data['chats']
 
     @property
     def restent(self) -> list:
@@ -239,6 +225,22 @@ class Settings:
         """
         return self.__data['restlangs']
 
+    @property
+    def dev_users(self) -> list:
+        """
+        Get list of devs who can perform sudo on bot.
+        :return: Sudo user list.
+        """
+        return self.__data['admins']
+
+    @property
+    def restricted_spammers(self) -> list:
+        """
+        Get list of restricted spammers.
+        :return: Spammers list.
+        """
+        return self.__data['spammers']
+
     def __check_watchers(self, chatid: int):
         """
         Check if specified chat ID listed in watch list.
@@ -246,6 +248,23 @@ class Settings:
         :return: Generator object.
         """
         return (x for x in self.__data['watches'] if x[0] == chatid)
+
+    def __check_spammers(self, chatid: int):
+        """
+        Check if specified chat ID listed in spammer list.
+        :param chatid: Chat ID.
+        :return: Generator object.
+        """
+        return (x for x in self.__data['spammers'] if x[0] == chatid)
+      
+    
+    def __check_chats(self, chatid: int):
+        """
+        Check if specified chat ID listed in spammer list.
+        :param chatid: Chat ID.
+        :return: Generator object.
+        """
+        return (x for x in self.__data['chats'] if x in chatid)
 
     def get_watchers(self, chatid: int) -> list:
         """
@@ -255,6 +274,39 @@ class Settings:
         """
         result = next(self.__check_watchers(chatid), None)
         return result[1] if result else []
+      
+    def get_chats(self, chatid: int) -> list:
+        """
+        Get watchers of specified chat.
+        :param chatid: Chat ID.
+        :return: List of watchers.
+        """
+        result = next(self.__check_chats(chatid), None)
+        return result[1] if result else []
+      
+    def get_spammers(self, chatid: int) -> list:
+        """
+        Get spammers of specified chat.
+        :param chatid: Chat ID.
+        :return: List of spammers.
+        """
+        result = next(self.__check_spammers(chatid), None)
+        return result[1] if result else []
+
+
+    def add_spammer(self, userid: int, chatid: int) -> None:
+        """
+        Add new spammer to the list of spammers.
+        :param userid: User ID.
+        :param chatid: Chat ID.
+        """
+        if any(self.__check_spammers(chatid)):
+            for spam in self.__data['spammers']:
+                if spam[0] == chatid:
+                    if userid not in spam[1]:
+                        spam[1].append(userid)
+        else:
+            self.__data['spammers'].append([chatid, [userid]])
 
     def add_watch(self, userid: int, chatid: int) -> None:
         """
@@ -272,7 +324,7 @@ class Settings:
 
     def remove_watch(self, userid: int, chatid: int) -> None:
         """
-        Add watch for reports feature.
+        Remove watch for reports feature.
         :param userid: User ID.
         :param chatid: Chat ID.
         """
@@ -280,6 +332,17 @@ class Settings:
             if watch[0] == chatid:
                 if userid in watch[1]:
                     watch[1].remove(userid)
+          
+    def remove_spammer(self, userid: int, chatid: int) -> None:
+        """
+        Remove spammer from list of spammers.
+        :param userid: User ID.
+        :param chatid: Chat ID.
+        """
+        for spam in self.__data['spammers']:
+            if spam[0] == chatid:
+                if userid in spam[1]:
+                    spam[1].remove(userid)
 
     def add_stopword(self, stopword: str) -> None:
         """
@@ -302,7 +365,7 @@ class Settings:
         """
         Save current settings to JSON file.
         """
-        os.remove(self.__cfgfile)
+        
         with open(self.__cfgfile, 'w+') as f:
             json.dump(self.__data, f)
 
@@ -362,7 +425,7 @@ class Settings:
         Main constructor of Settings class.
         :param schid: Required schema version.
         """
-        self.__appname = 'bfasbot'
+        self.__appname = 'bfas'
         self.__data = {}
         self.__find_cfgfile()
         if not os.path.isfile(self.__cfgfile):

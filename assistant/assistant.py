@@ -22,7 +22,7 @@
 
 from configparser import ConfigParser
 
-from pyrogram import Client
+from pyrogram import Client, Filters
 import logging
 from logging.handlers import RotatingFileHandler
 from logging import handlers
@@ -36,7 +36,6 @@ known_sessions_file = os.path.join(os.path.dirname(__file__), 'logtest')
 # Set up dual logging and tell duallog where to store the logfiles.
 duallog.setup(known_sessions_file)
 from assistant.utils.helpers import ParamExtractor, Ranges
-
 from assistant.utils.settings import Settings, CheckMessage, CheckUsername
 #os.remove("{}/*.session".format(os.getcwd
 LOGGER = os.environ.get("LOGGER")

@@ -35,7 +35,7 @@ class Ranges:
         Main constructor of Ranges class.
         :param inputstr: Source string.
         """
-        self.__rlist = list(chain.from_iterable(map(self.__parserange, " ".join(inputstr).split(','))))
+        self.__rlist = list(chain.from_iterable(map(self.__parserange, " ".join(inputstr.replace('\r', '').replace('\n', '').replace(' ', ', ').split()))))
 
 
 class ParamExtractor:
@@ -62,6 +62,6 @@ class ParamExtractor:
         Main constructor of ParamExtractor class.
         :param query: Source string.
         """
-        self.__query = query.strip()
+        self.__query = " ".join(query.replace('\r', ' ').replace('\n', ' ').replace(' ', ', ').split())
         self.__delimeter = ' '
         self.__index = self.__query.find(self.__delimeter)

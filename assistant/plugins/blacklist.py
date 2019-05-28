@@ -34,7 +34,7 @@ import time
 
 from assistant.utils.helpers import ParamExtractor, Ranges
 
-from assistant.utils.settings import Settings, CheckMessage, CheckUsername, LogMessage
+from assistant.utils.settings import Settings, CheckMessage, CheckUsername
 
 
         
